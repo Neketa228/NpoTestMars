@@ -13,6 +13,7 @@ SOURCES += \
     form.cpp \
     main.cpp \
     mainwindow.cpp \
+    mylineedit.cpp \
     paintlabel.cpp \
     point.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     calculation.h \
     form.h \
     mainwindow.h \
+    mylineedit.h \
     paintlabel.h \
     point.h
 

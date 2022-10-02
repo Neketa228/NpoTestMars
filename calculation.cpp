@@ -43,7 +43,6 @@ void Calculation::findCrossPoint(){
 
 void Calculation::timeCross(){
     //Метод для поиска дистанции и времени пересечения
-    double T1, T2, D1 = 0.0, D2 = 0;
     D1 = sqrt(pow(crossPoint.x - p1.x,2) + pow(crossPoint.y - p1.y,2));
     D2 = sqrt(pow(crossPoint.x - p2.x,2) + pow(crossPoint.y - p2.y,2));
     T1=D1/p1.v;

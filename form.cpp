@@ -3,82 +3,128 @@
 Form::Form(){
     //Создаем поля для ввода
     cal = new Calculation();
-    PaintLabel *pl = new PaintLabel(cal, this);
+    pl = new PaintLabel(cal, this);
     QGridLayout *glayout = new QGridLayout(this);
-    lineEdit1 = new QLineEdit(this);
-    lineEdit2 = new QLineEdit(this);
-    lineEdit3 = new QLineEdit(this);
-    lineEdit4 = new QLineEdit(this);
-    lineEdit5 = new QLineEdit(this);
-    lineEdit6 = new QLineEdit(this);
-    lineEdit7 = new QLineEdit(this);
-    lineEdit8 = new QLineEdit(this);
-    setDefault();
+    QHBoxLayout *hboxlayout = new QHBoxLayout(this);
+    lineEditX1 = new MyLineEdit("x1" , this);
+    lineEditY1 = new MyLineEdit("y1" ,this);
+    lineEditK1 = new MyLineEdit("k1" ,this);
+    lineEditV1 = new MyLineEdit("v1" ,this);
+    lineEditX2 = new MyLineEdit("x2" ,this);
+    lineEditY2 = new MyLineEdit("y2" ,this);
+    lineEditK2 = new MyLineEdit("k2" ,this);
+    lineEditV2 = new MyLineEdit("v2" ,this);
+    info = new QLabel(this);
+    //info->setText("Puk12312312321");
+    updateLineEdits();
     // Создаем кнопки
     QPushButton *start = new QPushButton("Start", this);
     QPushButton *pause = new QPushButton("Pause", this);
     QPushButton *resume = new QPushButton("Resume", this);
 
     // Делаем правильное расположение
-    glayout->addWidget(pl);
-    glayout->addWidget(lineEdit1);
-    glayout->addWidget(lineEdit2);
-    glayout->addWidget(lineEdit3);
-    glayout->addWidget(lineEdit4);
-    glayout->addWidget(lineEdit5);
-    glayout->addWidget(lineEdit6);
-    glayout->addWidget(lineEdit7);
-    glayout->addWidget(lineEdit8);
+    hboxlayout -> addWidget(pl);
+    hboxlayout -> addWidget(info);
+   // glayout->addWidget(pl);
+    glayout->addLayout(hboxlayout, 0, 0);
+    glayout->addWidget(lineEditX1);
+    glayout->addWidget(lineEditY1);
+    glayout->addWidget(lineEditK1);
+    glayout->addWidget(lineEditV1);
+    glayout->addWidget(lineEditX2);
+    glayout->addWidget(lineEditY2);
+    glayout->addWidget(lineEditK2);
+    glayout->addWidget(lineEditV2);
     glayout->addWidget(start);
     glayout->addWidget(pause);
     glayout->addWidget(resume);
-
     setLayout(glayout);
-
-    QObject :: connect(start, &QPushButton::clicked, this, &Form::setPoints);
+    setDefault();
+    QObject :: connect(start, &QPushButton::clicked, this, &Form::startProgram);
    // QObject :: connect(start, &QPushButton::clicked, cal, &PaintLabel::paintEvent);
     QObject :: connect(pause, &QPushButton::clicked, this, &Form::pause);
     QObject :: connect(resume, &QPushButton::clicked, this, &Form::resume);
     timer= new QTimer (this);
     timer->setInterval(1000);
-    QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::updatePosition);
-    QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::timeCross);
+    //QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::updatePosition);
+   //QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::timeCross);
+    QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
+    QObject :: connect(timer, &QTimer::timeout, pl, qOverload<>(&QWidget::update));
+    QObject :: connect(timer, &QTimer::timeout, this, &Form::setInfo);
+    QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
+
+    setInfo();
+
+
 
 
 }
-
 void Form::setDefault()
 {
     //Задаем значения по умолчанию
-    lineEdit1->setText("0");
-    lineEdit2->setText("0");
-    lineEdit3->setText("45");
-    lineEdit4->setText("1");
-    lineEdit5->setText("7");
-    lineEdit6->setText("0");
-    lineEdit7->setText("135");
-    lineEdit8->setText("1");
+    lineEditX1->lineedit->setText("50");
+    lineEditY1->lineedit->setText("0");
+    lineEditK1->lineedit->setText("45");
+    lineEditV1->lineedit->setText("5");
+    lineEditX2->lineedit->setText("100");
+    lineEditY2->lineedit->setText("20");
+    lineEditK2->lineedit->setText("135");
+    lineEditV2->lineedit->setText("7");
+
 
 }
+
+void Form::updateLineEdits()
+{
+    //Задаем значения по умолчанию
+    setPoints();
+    lineEditX1->lineedit->setText(QString::number(cal->p1.x));
+    lineEditY1->lineedit->setText(QString::number(cal->p1.y));
+    lineEditK1->lineedit->setText(QString::number(cal->p1.k));
+    lineEditV1->lineedit->setText(QString::number(cal->p1.v));
+    lineEditX2->lineedit->setText(QString::number(cal->p2.x));
+    lineEditY2->lineedit->setText(QString::number(cal->p2.y));
+    lineEditK2->lineedit->setText(QString::number(cal->p2.k));
+    lineEditV2->lineedit->setText(QString::number(cal->p2.v));
+
+
+}
+
+
 
 void Form::setPoints(){
     // Передаем значение из полей в переменные
-    cal->p1.x = lineEdit1 -> text().toDouble();
-    cal->p1.y = lineEdit2 -> text().toDouble();
-    cal->p1.k = lineEdit3 -> text().toDouble();
-    cal->p1.v = lineEdit4 -> text().toDouble();
-    cal->p2.x = lineEdit5 -> text().toDouble();
-    cal->p2.y = lineEdit6 -> text().toDouble();
-    cal->p2.k = lineEdit7 -> text().toDouble();
-    cal->p2.v = lineEdit8 -> text().toDouble();
-    //Запускаем таймер
-    timer->start();
+    cal->p1.x = lineEditX1 -> lineedit->text().toDouble();
+    cal->p1.y = lineEditY1 -> lineedit->text().toDouble();
+    cal->p1.k = lineEditK1 -> lineedit->text().toDouble();
+    cal->p1.v = lineEditV1 -> lineedit->text().toDouble();
+    cal->p2.x = lineEditX2 -> lineedit->text().toDouble();
+    cal->p2.y = lineEditY2 -> lineedit->text().toDouble();
+    cal->p2.k = lineEditK2 -> lineedit->text().toDouble();
+    cal->p2.v = lineEditV2 -> lineedit->text().toDouble();
+    //
     cal->findCrossPoint();
     cal->timeCross();
+    cal->updatePosition();
 
 }
 
+void Form::setInfo()
+{
+    QString infostr;
+    infostr.append("P1: x = " + QString::number(cal->p1.x) + " y = " + QString::number(cal->p1.y) + "\n");
+    infostr.append("D1 = " + QString::number(cal->D1) + " T1 = " + QString::number(cal->T1) + "\n");
+    infostr.append("P2: x = " + QString::number(cal->p2.x) + " y = " + QString::number(cal->p2.y) + "\n");
+    infostr.append("D1 = " + QString::number(cal->D2) + " T1 = " + QString::number(cal->T2) + "\n");
 
+    info->setText(infostr);
+}
+
+void Form::startProgram()
+{
+    setPoints();
+    timer ->start();
+}
 
 void Form::pause()
 {

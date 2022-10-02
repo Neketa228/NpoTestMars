@@ -10,11 +10,10 @@
 #include <QDebug>
 #include <QTimer>
 #include <cmath>
-#include "point.h"
-#include "paintlabel.h"
 #include "calculation.h"
-
-
+#include "paintlabel.h"
+#include "qlabel.h"
+#include "mylineedit.h"
 
 
 class Form : public QWidget{
@@ -25,26 +24,30 @@ public:
 
 
 private:
-
-    QLineEdit *lineEdit1;
-    QLineEdit *lineEdit2;
-    QLineEdit *lineEdit3;
-    QLineEdit *lineEdit4;
-    QLineEdit *lineEdit5;
-    QLineEdit *lineEdit6;
-    QLineEdit *lineEdit7;
-    QLineEdit *lineEdit8;
+    PaintLabel *pl;
+    QLabel *info;
+    MyLineEdit *lineEditX1;
+    MyLineEdit *lineEditY1;
+    MyLineEdit *lineEditK1;
+    MyLineEdit *lineEditV1;
+    MyLineEdit *lineEditX2;
+    MyLineEdit *lineEditY2;
+    MyLineEdit *lineEditK2;
+    MyLineEdit *lineEditV2;
     Calculation *cal;
     QTimer *timer;
+
+
+
     void setDefault();
-
-
 private slots:
    void setPoints();
-
+   void setInfo();
+   void updateLineEdits();
 //   void updatePosition();
 //   void findCrossPoint();
 //   void timeCross();
+   void startProgram();
    void pause();
    void resume();
 

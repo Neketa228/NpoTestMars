@@ -22,6 +22,9 @@ void PaintLabel::paintEvent(QPaintEvent *event)
         QPen RedPen (Qt::red);
         RedPen.setWidth(5);
 
+        QPen BlackPenThin (Qt::black);
+        BlackPenThin.setWidth(1);
+
         QPoint left,right,up,down,mid;
 
 
@@ -39,7 +42,9 @@ void PaintLabel::paintEvent(QPaintEvent *event)
 //    painter -> setPen(RedPen);
 //    painter -> drawPoint(QPoint(cal->p1.x));
 //}
-
+        painter->setPen(BlackPenThin);
+        painter->drawLine(QPoint(cal->p1.x + maxsize/2,abs(cal->p1.y - maxsize/2)), QPoint(cal->crossPoint.x + maxsize/2,abs(cal->crossPoint.y - maxsize/2)));
+        painter->drawLine(QPoint(cal->p2.x + maxsize/2,abs(cal->p2.y - maxsize/2)), QPoint(cal->crossPoint.x + maxsize/2,abs(cal->crossPoint.y - maxsize/2)));
 
         painter->setPen(BlackPen);
         painter->drawLine(left, right);
@@ -47,11 +52,11 @@ void PaintLabel::paintEvent(QPaintEvent *event)
 
         painter->setPen(BluePen);
         painter->drawPoint(QPoint(cal->crossPoint.x + maxsize/2,abs(cal->crossPoint.y - maxsize/2)));
+
         painter->setPen(RedPen);
         painter->drawPoint(QPoint(cal->p1.x + maxsize/2,abs(cal->p1.y - maxsize/2)));
         painter->drawPoint(QPoint(cal->p2.x + maxsize/2,abs(cal->p2.y - maxsize/2)));
-     //painter->drawLine(QPoint(cal->p1.x + maxsize/2,abs(cal->p1.y - maxsize/2)));
-//        painter->drawLine(QPoint(cal->p2.x + maxsize/2,abs(cal->p2.y - maxsize/2)));
+
 
 
 
@@ -60,3 +65,8 @@ void PaintLabel::paintEvent(QPaintEvent *event)
         painter->end();
 
 }
+
+//void PaintLabel::myrepaint()
+//{
+//    this->repaint();
+//}
