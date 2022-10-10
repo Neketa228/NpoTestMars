@@ -7,6 +7,7 @@ Calculation::Calculation()
 }
 void Calculation::updatePosition(){
     //Метод изменения координат каждой точки
+
     p1.x += p1.v * std::cos(p1.k * PI / 180);
     p1.y += p1.v * std::sin(p1.k * PI / 180);
     p2.x +=  p2.v * std::cos(p2.k * PI / 180);
@@ -26,7 +27,7 @@ void Calculation::findCrossPoint(){
     B1 = p1.x - x1;
     B2 = p2.x - x2;
     N = A1*B2 - A2*B1;
-    pr = (abs(N) > Eps);
+    pr = (qAbs(N) > Eps);
     if (pr == true){
         C1 = x1*p1.y -p1.x*y1;
         C2 = x2*p2.y - p2.x*y2;

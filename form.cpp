@@ -15,17 +15,15 @@ Form::Form(){
     lineEditK2 = new MyLineEdit("k2" ,this);
     lineEditV2 = new MyLineEdit("v2" ,this);
     info = new QLabel(this);
-    //info->setText("Puk12312312321");
     updateLineEdits();
     // Создаем кнопки
-    QPushButton *start = new QPushButton("Start", this);
-    QPushButton *pause = new QPushButton("Pause", this);
-    QPushButton *resume = new QPushButton("Resume", this);
+    QPushButton *start = new QPushButton("Старт", this);
+    QPushButton *pause = new QPushButton("Пауза", this);
+    QPushButton *resume = new QPushButton("Продолжить", this);
 
     // Делаем правильное расположение
     hboxlayout -> addWidget(pl);
     hboxlayout -> addWidget(info);
-   // glayout->addWidget(pl);
     glayout->addLayout(hboxlayout, 0, 0);
     glayout->addWidget(lineEditX1);
     glayout->addWidget(lineEditY1);
@@ -41,17 +39,17 @@ Form::Form(){
     setLayout(glayout);
     setDefault();
     QObject :: connect(start, &QPushButton::clicked, this, &Form::startProgram);
-   // QObject :: connect(start, &QPushButton::clicked, cal, &PaintLabel::paintEvent);
     QObject :: connect(pause, &QPushButton::clicked, this, &Form::pause);
     QObject :: connect(resume, &QPushButton::clicked, this, &Form::resume);
-    timer= new QTimer (this);
+    timer = new QTimer (this);
+    etimer = new QElapsedTimer();
+    mtime = QTime(0,0);
     timer->setInterval(1000);
-    //QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::updatePosition);
-   //QObject :: connect(timer, &QTimer::timeout, cal, &Calculation::timeCross);
     QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
     QObject :: connect(timer, &QTimer::timeout, pl, qOverload<>(&QWidget::update));
     QObject :: connect(timer, &QTimer::timeout, this, &Form::setInfo);
     QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
 
     setInfo();
 
@@ -102,11 +100,23 @@ void Form::setPoints(){
     cal->p2.y = lineEditY2 -> lineedit->text().toDouble();
     cal->p2.k = lineEditK2 -> lineedit->text().toDouble();
     cal->p2.v = lineEditV2 -> lineedit->text().toDouble();
-    //
+
+    if(cal->p1.k == cal->p2.k || cal->p1.k -180 == cal->p2.k || cal->p2.k -180 == cal-> p1.k ){
+    lineEditX1->lineedit->setText("-");
+    lineEditY1->lineedit->setText("-");
+    lineEditK1->lineedit->setText("-");
+    lineEditV1->lineedit->setText("-");
+    lineEditX2->lineedit->setText("-");
+    lineEditY2->lineedit->setText("-");
+    lineEditK2->lineedit->setText("-");
+    lineEditV2->lineedit->setText("-");
+    //pause();
+    }
+    else{
     cal->findCrossPoint();
     cal->timeCross();
     cal->updatePosition();
-
+    }
 }
 
 void Form::setInfo()
@@ -116,6 +126,8 @@ void Form::setInfo()
     infostr.append("D1 = " + QString::number(cal->D1) + " T1 = " + QString::number(cal->T1) + "\n");
     infostr.append("P2: x = " + QString::number(cal->p2.x) + " y = " + QString::number(cal->p2.y) + "\n");
     infostr.append("D1 = " + QString::number(cal->D2) + " T1 = " + QString::number(cal->T2) + "\n");
+    infostr.append("Координаты точки пересечения : x=" + QString::number(cal->crossPoint.x) + " y=" + QString::number(cal->crossPoint.y) + "\n");
+    infostr.append("Текущее время = " + mtime.toString("hh:mm:ss") + "\n");
 
     info->setText(infostr);
 }
@@ -124,6 +136,7 @@ void Form::startProgram()
 {
     setPoints();
     timer ->start();
+    etimer ->start();
 }
 
 void Form::pause()
@@ -138,4 +151,8 @@ void Form::resume()
 
 }
 
+void Form::updateTime()
+{
+    mtime = mtime.addMSecs(etimer->restart());
+}
 

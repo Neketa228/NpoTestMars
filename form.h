@@ -9,6 +9,8 @@
 #include <QGridLayout>
 #include <QDebug>
 #include <QTimer>
+#include <QElapsedTimer>
+#include <QTime>
 #include <cmath>
 #include "calculation.h"
 #include "paintlabel.h"
@@ -36,6 +38,8 @@ private:
     MyLineEdit *lineEditV2;
     Calculation *cal;
     QTimer *timer;
+    QElapsedTimer *etimer;
+    QTime mtime;
 
 
 
@@ -44,12 +48,10 @@ private slots:
    void setPoints();
    void setInfo();
    void updateLineEdits();
-//   void updatePosition();
-//   void findCrossPoint();
-//   void timeCross();
    void startProgram();
    void pause();
    void resume();
+   void updateTime();
 
 
 };
