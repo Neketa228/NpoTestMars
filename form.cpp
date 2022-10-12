@@ -49,7 +49,8 @@ Form::Form(){
     QObject :: connect(timer, &QTimer::timeout, pl, qOverload<>(&QWidget::update));
     QObject :: connect(timer, &QTimer::timeout, this, &Form::setInfo);
     QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
+    //QObject :: connect(timer, &QTimer::timeout, this, &Form::updateLineEdits);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
 
     setInfo();
 

@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     calculation.cpp \
     form.cpp \
+    formular.cpp \
     main.cpp \
     mainwindow.cpp \
     mylineedit.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     calculation.h \
     form.h \
+    formular.h \
     mainwindow.h \
     mylineedit.h \
     paintlabel.h \
